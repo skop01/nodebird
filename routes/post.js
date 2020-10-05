@@ -8,7 +8,6 @@ const multerS3 = require('multer-s3');
 const { Post, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
-
 const router = express.Router();
 
 try {
@@ -37,7 +36,9 @@ const upload = multer({
 
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
     console.log(req.file);
-    res.json({ url: req.file.location });
+    const originalUrl = req.file.location;
+    const url = originalUrl.replace(/\/original\//, '/thumb/')
+    res.json({ url, originalUrl: req.file.location });
 });
 
 const upload2 = multer();
